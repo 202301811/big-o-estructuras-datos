@@ -1,9 +1,13 @@
 # Resultados del laboratorio - Análisis Big O
 
 ## Integrantes
-- Nombre: [Tu Nombre Completo]
+- Nombre: Rene Rafael Palacios
+Joe Jafet Hernandez
+Juan Rene Arevalo
 - Carnet: 202301811
-
+202301858
+202300957
+  
 ## URL RAW utilizada
 `https://raw.githubusercontent.com/202301811/big-o-estructuras-datos/main/data/estudiantes.csv`
 
