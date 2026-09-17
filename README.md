@@ -53,34 +53,34 @@ En **List** y **Lista Enlazada**, una búsqueda fallida representa forzosamente 
 ## 10 Preguntas Obligatorias de Análisis (Guía de Laboratorio)
 
 1. **¿Por qué una búsqueda secuencial sobre List se clasifica como O(n)?**  
-   Porque en el peor caso se debe iterar sobre cada uno de los $n$ elementos. El número de operaciones escala en proporción 1:1 con respecto al tamaño de la entrada.
+   Básicamente porque, en el peor de los casos, a Python le toca revisar uno por uno todos los elementos hasta llegar al final. Si la lista crece, el tiempo de búsqueda va a crecer exactamente en esa misma proporción (es decir, escala 1:1 con el tamaño de los datos).
 
 2. **¿Por qué Set y Dictionary tienen búsqueda O(1) en promedio?**  
-   Porque utilizan direccionamiento hash, donde la clave determina directamente la posición del registro en memoria en una sola operación sin requerir barridos lineales.
+   Porque por debajo hacen "trampa" usando Tablas Hash. En lugar de ir buscando registro por registro, toman la llave (en nuestro caso, el carnet), le aplican una fórmula matemática y saltan directamente a la posición exacta en memoria. Todo en un solo movimiento.
 
 3. **¿Por qué O(1) no significa "cero tiempo" ni "exactamente el mismo tiempo siempre"?**  
-   $O(1)$ significa orden constante, no ausencia de tiempo. Ejecutar las instrucciones de la CPU, calcular el hash y atender interrupciones del procesador siempre consume microsegundos, los cuales pueden fluctuar ligeramente (ej. entre `0.00000015 s` y `0.00000018 s`).
+   Porque O(1) significa que el esfuerzo se mantiene "constante", pero hacer las cosas igual toma tiempo físico. La computadora siempre gasta sus microsegundos en hacer el cálculo de la llave o manejar procesos de fondo; por eso en nuestras pruebas veíamos pequeñas fluctuaciones (variaba entre 0.00000015 s y 0.00000018 s), pero la gran diferencia es que el tiempo nunca se disparaba.
 
 4. **¿Cuál es la diferencia entre medir segundos y analizar Big O?**  
-   Medir segundos evalúa el rendimiento práctico de una ejecución en una computadora particular. Big O modela formalmente cómo escala la complejidad algorítmica al crecer $n$.
+   Medir en segundos es súper relativo; depende de qué tan buena sea nuestra computadora, el sistema operativo o qué más estemos corriendo en ese momento. En cambio, analizar el Big O es usar matemáticas puras para saber cómo se va a comportar y escalar nuestro algoritmo si de repente le metemos millones de datos, sin importar la máquina.
 
 5. **¿Por qué una lista enlazada puede insertar al inicio en O(1) pero buscar en O(n)?**  
-   Insertar al inicio solo requiere enlazar el nuevo nodo a la cabeza actual y actualizar el puntero (operación atómica e invariable). Buscar requiere saltar de nodo en nodo mediante punteros hasta el final ($O(n)$), lo cual en nuestra prueba tomó `0.00081263 s`.
+   Meter un dato al inicio es O(1) porque es un movimiento súper directo: solo creamos el nuevo eslabón, lo enganchamos a la cabeza de la lista y actualizamos el puntero (no movemos nada más). Para buscar es otra historia, no tenemos índices, así que nos toca ir saltando de nodo en nodo hasta el final, lo que se vuelve un recorrido O(n). En nuestra prueba eso nos tomó `0.00081263 s`.
 
 6. **¿Qué condición permite que un árbol de búsqueda se acerque a O(log n)?**  
-   Que el árbol se mantenga balanceado en sus dos ramas. De esta forma, cada comparación izquierda/derecha descarta la mitad de los elementos restantes.
+   Que el árbol esté bien balanceado. Si las ramas están parejitas, cada vez que bajamos a la izquierda o a la derecha estamos descartando automáticamente la mitad de todos los datos que quedaban, haciendo que la búsqueda sea rapidísima.
 
 7. **¿Qué ocurre con el BST si se inserta información ya ordenada?**  
-   Se degenera en una estructura equivalente a una lista enlazada unilineal, aumentando la altura a $n$ y degradando la búsqueda a $O(n)$. Por ello en nuestra prueba se aplicó `random.shuffle()` para preservarlo balanceado (`0.00000261 s`).
+   Es el peor escenario. Si metemos los datos ya ordenados, el árbol crece solamente hacia un lado y se termina convirtiendo prácticamente en una lista enlazada normal, arruinando la búsqueda y volviéndola O(n). Por eso en nuestro código usamos random.shuffle() para desordenar todo primero, así garantizamos que quedara balanceado y logramos un tiempo de `0.00000261 s`.
 
 8. **¿Qué estructura elegiría para recuperar un estudiante completo por carnet? Justifique.**  
-   Un **Diccionario**, ya que maneja la relación clave-valor requerida para devolver el objeto del estudiante en $O(1)$.
+   UDe lejos elegiríamos un Diccionario. Como nos piden recuperar todos los datos del estudiante, el diccionario nos permite usar el carnet como "llave" y guardar todo el objeto como "valor". Nos devuelve el registro completo al instante en $O(1)$.
 
 9. **¿Qué estructura elegiría si solamente necesita saber si un carnet existe? Justifique.**  
-   Un **Set**, ya que solo almacena las claves optimizando el uso de memoria RAM y comprobando existencia en $O(1)$.
+   Para este caso nos iríamos con un Set (Conjunto). Si solo queremos un "sí o no" (saber si existe), el Set nos da la misma velocidad instantánea $O(1)$ que el diccionario, pero ahorrándonos muchísima memoria RAM, porque no guarda los datos completos del estudiante, solo las claves.
 
 10. **Si el sistema realiza 70% búsquedas, 20% inserciones y 10% reportes, ¿qué decisión de diseño tomaría y por qué?**  
-    Utilizaría un **Diccionario** como almacenamiento principal para garantizar que el 90% de las operaciones críticas (búsquedas e inserciones) se ejecuten en $O(1)$. Para el 10% restante de reportes, generaría vistas o listas ordenadas bajo demanda.
+    Nos quedaríamos con un Diccionario como estructura base. Si el 90% del trabajo crítico del día a día son búsquedas e inserciones, el diccionario nos garantiza que todo eso fluirá rapidísimo en O(1). Para el 10% de los reportes (que seguro requieren ordenar la info de alguna manera), simplemente generaríamos vistas o listas temporales a partir de ese diccionario solo en el momento que se necesiten.
 
 ---
 
