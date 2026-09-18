@@ -33,21 +33,25 @@ Juan Rene Arevalo
 
 ## Preguntas de la plantilla
 
-### 1. ¿Por qué List crece aproximadamente de forma lineal?
-Porque la búsqueda en una lista tradicional se realiza de manera secuencial (elemento por elemento). Al colocar el elemento objetivo al final de la muestra, el algoritmo se ve obligado a realizar $n$ comparaciones. En nuestras mediciones reales se observa claramente: al pasar de $n = 1,000$ (`0.00003870 s`) a $n = 10,000$ (`0.00044595 s`), el tamaño se multiplicó por 10 y el tiempo también aumentó aproximadamente 11 veces, cumpliendo el modelo matemático $O(n)$.
+1. **¿Por qué List crece aproximadamente de forma lineal?**
 
-### 2. ¿Por qué Set y Dict se comportan de forma distinta?
-Tanto Set como Dict están fundamentados internamente en Tablas Hash. En lugar de iterar secuencialmente, aplican una función matemática sobre la clave (el carnet) que calcula de forma inmediata la dirección exacta en memoria. En nuestras pruebas empíricas, tanto con 100 registros como con 100,000 registros, el tiempo se mantuvo invariablemente en torno a `0.00000016 s`, demostrando que no dependen del volumen de datos ($O(1)$ en promedio).
+Porque List hace una búsqueda secuencial, si nosotros buscamos un elemento al final, se necesitan n comparaciones sucesivas ($O(n)$). Nuestras mediciones son precisas: al multiplicar los datos por 10 (de 1,000 a 10,000) el tiempo de búsqueda también se multiplica casi por 11 (de `0.00003870 s` a `0.00044595 s`), mostrando una proporción directa en el tiempo de búsqueda.
 
-### 3. ¿Medir tiempo es lo mismo que demostrar Big O? Explique.
-No. Medir tiempo con `time.perf_counter()` obtiene valores físicos en segundos, los cuales dependen directamente del hardware, el sistema operativo, la carga del procesador y las optimizaciones del intérprete de Python. Big O, en cambio, es una abstracción matemática que clasifica la tasa de crecimiento del trabajo computacional en el límite asintótico ($n \to \infty$), independientemente de la máquina en que se ejecute.
+2. **¿Por qué Set y Dict se comportan de forma distinta?**
 
-### 4. ¿Qué estructura elegiría para búsquedas por carnet y por qué?
-Elegiría un **Diccionario (Dict)**. Dado que el caso de estudio requiere no solo verificar si el estudiante existe sino también "recuperar todos sus datos", el diccionario permite indexar el carnet como clave única y asociar el registro completo como valor. Esto garantiza recuperar la información completa en tiempo constante $O(1)$ sin importar si la universidad tiene 1,000 o 5,000,000 de alumnos.
+Porque internamente utilizan **Tablas Hash**. Se aplica una fórmula matemática a la clave (el carnet) para ir directamente a su posición en la memoria en un solo paso, por ello, en las pruebas el tiempo se mantuvo constante en aproximadamente $\approx 0.00000016$ segundos tanto para 100 como para 100,000 registros, validando su eficiencia $O(1)$.
 
-### 5. ¿Qué cambia cuando el carnet buscado no existe?
-En **List** y **Lista Enlazada**, una búsqueda fallida representa forzosamente el peor escenario posible ($O(n)$), ya que el algoritmo tiene que recorrer y comparar absolutamente todos los elementos (`0.00548227 s` en nuestra prueba) antes de concluir que no está. Por el contrario, en **Set** y **Dict**, la búsqueda fallida sigue tomando tiempo constante $O(1)$ (`0.00000015 s`), ya que la función hash consulta directamente la casilla correspondiente y confirma de inmediato que la clave no existe.
+3. **¿Medir tiempo es lo mismo que demostrar Big O? Explique.**
 
+No. Medir tiempo da valores físicos que dependen del hardware y del sistema operativo del que disponemos en ese momento. **Big O**, en cambio, es un modelo matemático universal que evalúa cómo escalará el esfuerzo computacional al procesar millones de datos ($n \to \infty$), sin importar la computadora que se use.
+
+4. **¿Qué estructura elegiría para búsquedas por carnet y por qué?**
+
+Elegiriamos un **Diccionario (Dict)**, como el problema exige recuperar todos los datos del estudiante (no solo saber si existe), el diccionario usa el carnet como la llave para extraer el registro completo de forma inmediata ($O(1)$), esto nos garantiza el mismo rendimiento sin importar el tamaño de la universidad.
+
+5. **¿Qué cambia cuando el carnet buscado no existe?**
+
+En una **List**, se fuerza el peor escenario ($O(n)$) es decir, recorre todos los 100,000 registros antes de confirmar que el carnet no está (`0.00548227 s`). **En Set o Dict**, la búsqueda sigue siendo instantánea en $O(1)$ (`0.00000015 s`), porque la función hash revisa su dirección en memoria y, al verla vacía, confirma inmediatamente su inexistencia.
 ---
 
 ## 10 Preguntas Obligatorias de Análisis (Guía de Laboratorio)
